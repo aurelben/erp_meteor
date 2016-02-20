@@ -21,6 +21,17 @@ Template.Todos.helpers({
 		Meteor.call('singleton', callback);
 
 		return Session.get("q");
+	},
+
+	state: function(){
+		function callback(error, result, res) {
+			
+			console.log(result);
+			console.log(error);
+		}
+		Meteor.call('testState', callback);
+
+		return;
 	}
 
 });
@@ -29,6 +40,7 @@ Template.Todos.helpers({
 /* Todos: Lifecycle Hooks */
 /*****************************************************************************/
 Template.Todos.onCreated(function () {
+	
 });
 
 Template.Todos.onRendered(function () {
