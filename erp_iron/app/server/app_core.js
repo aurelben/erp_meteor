@@ -3,6 +3,7 @@
 /*****************************************************************************/
 var ClientProject = function (name, date) {
     this.currentState = new Prospect(this);
+    this.currentState.subscribe(stateObs);
     this.name = name;
     
     if(!date){
@@ -12,7 +13,11 @@ var ClientProject = function (name, date) {
     }
   
     this.setState = function (state) {
+        this.currentState.unsubscribe(stateObs);
+        
         this.currentState = state;
+        
+        this.currentState.subscribe(stateObs);
         this.currentState.save();
     };
   
@@ -47,6 +52,12 @@ var ClientState = function (client) {
     
     this.setEtape = function (etape) {
       this.currentEtape = this.factory.createEtape(etape);
+      this.fire(this);
+    };
+
+    this.validEtape = function (opt) {
+      this.currentEtape.setValid(opt);
+      this.fire(this);
     }; 
   
     this.getEtape = function () {
@@ -99,16 +110,12 @@ ClientState.prototype = {
 var stateObs = function(item) {
     if(item.getEtape().getName() === "valid Prospect" && item.getEtape().getValid() === true){
       console.log("--------------go to next client state devis");
-      item.getClient().getState().unsubscribe(stateObs);
       item.getClient().setState(new Devis(item.getClient()));
-      item.getClient().getState().subscribe(stateObs);
     }
 
     if(item.getEtape().getName() === "valid Devis" && item.getEtape().getValid() === true){
       console.log("--------------go to next client state facture");
-      item.getClient().getState().unsubscribe(stateObs);
       item.getClient().setState(new Facture(item.getClient()));
-      item.getClient().getState().subscribe(stateObs);
     }
     
     console.log("fired: " + item.getEtape().getName()); 
@@ -342,34 +349,31 @@ ConfirmNeedFacture.prototype = new InitialFacture();
 function run() {
   var client = new ClientProject("alex");
 
-  var state = client.getState();
   
-  state.subscribe(stateObs);
-  state.setEtape("confirm");
-  state.fire(state);
-  var etape = state.getEtape();
-  //console.log(etape.getName());
+  //client.getState().subscribe(stateObs);
+  client.getState().setEtape("confirm");
+  client.getState().fire(client.getState());
   
   
-  state.setEtape("valid");
-  etape = state.getEtape();
-  etape.setValid(true);
-  state.fire(state);
+  client.getState().setEtape("valid");
+  
+  client.getState().validEtape(true);
+  //client.getState().fire(client.getState());
 
 
-  state = client.getState();
-  state.setEtape("valid");
-  etape = state.getEtape();
-  etape.setValid(true);
-  state.fire(state);
+  client.getState().setEtape("valid");
+  client.getState().validEtape(true);
+  //client.getState().fire(client.getState());
   console.log("IS SWITCHED OR NOT"+client.getState().getName());
-  var res = etape.getName();
+  console.assert(client.getState().getName() === "Facture", "SWITCHED status from devis to facture");
   
 //   setTimeout(function() {
 //   console.log("time out\n\n\n");
  
 //   }, 2000);
   var client2 = new ClientProject("alexMAJ");
+
+
   console.log("client 1 name: %s", client.getName());
   console.log("client 1 creation date: %d", client.getCreationDate());
   console.log("client 1 state is:"+ client.getState().getName());
@@ -377,9 +381,6 @@ function run() {
   // console.log("client 2 name: %s", client2.getName());
   // console.log("client 2 creation date: %d", client2.getCreationDate());
   
-  
-  
-  console.log("client 1 status etape " + res+"\n");
   
   return ("END ____---------_________------- Return");
 }
