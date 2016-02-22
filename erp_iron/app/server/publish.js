@@ -20,3 +20,7 @@ Meteor.publish('Devis', function () {
 Meteor.publish('Facture', function () {
   return Facture.find();
 });
+
+Meteor.publish('new_client', function () {
+  return NewClient.find();
+});

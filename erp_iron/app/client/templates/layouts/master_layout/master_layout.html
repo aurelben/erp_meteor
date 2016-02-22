@@ -13,7 +13,7 @@
 			</nav>
 		</div>
 		<main class="row">
-			<div class="container">	
+			<div >	
 				{{#if currentUser}}
 				<div class="col s3">
 					<div class="sidebar indigo darken-4">
@@ -30,15 +30,15 @@
 					</div>
 				</div>
 
-				<div class="col s9 green">
+				<div class="col s9">
 					<!-- Teal page content  -->
 					{{> yield}}
 				</div>
 				{{else}}
 				<div class="col s12 home-center">
-					<h2>
+					<h3>
 						Bienvenue sur ERP 2042 pour profiter de notre application merci de bien vouloir vous connectez
-					</h2>
+					</h3>
 				</div>
 
 				{{/if}}

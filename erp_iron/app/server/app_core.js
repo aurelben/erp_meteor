@@ -1,16 +1,23 @@
 /*****************************************************************************/
 /*  Define client class */
 /*****************************************************************************/
+var ShortId = Npm.require('shortid');
+
 var ClientProject = function (name, date) {
     this.currentState = new Prospect(this);
     this.currentState.subscribe(stateObs);
     this.name = name;
+    this.id = ShortId.generate();
+
+    console.log("client name "+this.name);
     
     if(!date){
       this.createDate = Date.now();
     } else {
       this.createDate = date;
     }
+
+    ClientProject.objects.push(this);
   
     this.setState = function (state) {
         this.currentState.unsubscribe(stateObs);
@@ -40,7 +47,29 @@ var ClientProject = function (name, date) {
     this.save = function () {
         console.log("I'am saving the prospect object");
     };
+
+    this.getAllProp = function (){
+      var res = {};
+      res.name = this.name;
+      res.id = this.id;
+      res.createDate = this.createDate;
+      console.log(this.currentState);
+      res.state = this.currentState.getAllProp();
+
+      return (res);
+    }
 };
+
+ClientProject.objects = [];
+
+ClientProject.prototype.removeObj = function() {
+  for (var i=0; i<ClientProject.objects.length; i++) {
+    if (ClientProject.objects[i] == this) {
+      ClientProject.objects.splice(i,1);
+    }
+  }
+};
+
 
 /*****************************************************************************/
 /*  define state classe */
@@ -49,6 +78,9 @@ var ClientProject = function (name, date) {
 var ClientState = function (client) {
     this.client = client;
     this.handlers = [];
+    this.id = ShortId.generate();
+    this.factory = new FactoryProspect();
+    this.currentEtape = this.factory.createEtape("init");
     
     this.setEtape = function (etape) {
       this.currentEtape = this.factory.createEtape(etape);
@@ -71,6 +103,17 @@ var ClientState = function (client) {
     this.save = function () {
         console.log("I'am saving the state object");
     };
+
+    this.getAllProp = function (){
+      var res = {};
+      res.name = this.name;
+      res.id = this.id;
+      res.createDate = this.createDate;
+      console.log(this.currentEtape);
+      res.etape = this.currentEtape.getAllProp();
+
+      return (res);
+    }
 };
 
 
@@ -128,8 +171,9 @@ var stateObs = function(item) {
 var Prospect = function (client) {
     this.client = client;
     this.factory = new FactoryProspect();
+    this.name = "Prospect";
     this.getName = function (){
-      return ("Prospect");
+      return (this.name);
     };
     
 };
@@ -140,8 +184,9 @@ Prospect.prototype = new ClientState();
 var Devis = function (client) {
     this.client = client;
     this.factory = new FactoryDevis();
+    this.name = "Devis";
     this.getName = function (){
-      return ("Devis");
+      return (this.name);
     };
     
 };
@@ -151,8 +196,9 @@ Devis.prototype = new ClientState();
 var Facture = function (client) {
     this.client = client;
     this.factory = new FactoryFacture();
+    this.name = "Facture";
     this.getName = function (){
-      return ("Facture");
+      return (this.name);
     };
     
 };
@@ -220,9 +266,11 @@ FactoryFacture.prototype = new FactoryProspect();
 function InitialProspect (){
   console.log("init prospect");
   this.isvalid = false;
+  this.id = ShortId.generate();
+  this.name = "init Prospect";
 
   this.getName = function () {
-    return "init Prospect";
+    return this.name;
   };
 
   this.setValid = function(opt) {
@@ -232,6 +280,20 @@ function InitialProspect (){
   this.getValid = function () {
     return (this.isvalid);
   };
+
+  this.getId = function () {
+    return this.id;
+  };
+
+  this.getAllProp= function (){
+      var res = {};
+      res.name = this.name;
+      res.id = this.id;
+      //res.createDate = this.createDate;
+      //res.etape = this.currentState.getAllProp();
+
+      return (res);
+    }
 }
 
 function ContactValidProspect (){
@@ -384,3 +446,50 @@ function run() {
   
   return ("END ____---------_________------- Return");
 }
+
+var Future = Npm.require( 'fibers/future' );
+
+
+function simpleStringify (object){
+    var simpleObject = {};
+    for (var prop in object ){
+        if (!object.hasOwnProperty(prop)){
+            continue;
+        }
+        if (typeof(object[prop]) == 'object'){
+            continue;
+        }
+        if (typeof(object[prop]) == 'function'){
+            continue;
+        }
+        simpleObject[prop] = object[prop];
+    }
+    return JSON.stringify(simpleObject); // returns cleaned up JSON
+};
+
+function facto(opt) {
+  return new ClientProject(opt);
+};
+
+Meteor.methods({
+    'getAllClients': function () {
+      // server method logic
+      console.log(simpleStringify(ClientProject.objects));
+      return simpleStringify(ClientProject.objects);
+    },
+
+    createNewClient: function (name) {
+      var future = new Future();
+      console.log("createNewClient method arg name: "+name);
+      //var res = new ClientProject(name);
+      //future.resolve(facto(name));
+      //console.dir(res);
+      //return future.wait();
+      //return facto(name);
+      var res = new ClientProject(name);
+      console.log(simpleStringify(res));
+      return (simpleStringify(res.getAllProp()));
+    }  
+});
+
+

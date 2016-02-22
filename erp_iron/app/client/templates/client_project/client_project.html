@@ -1,5 +1,51 @@
 <template name="ClientProject">
   <div class="client-project">
-    <h1>Find me in app/client/templates/client_project/client_project</h1>
+    <h4>All clients list</h4>
+    {{getAllClients}}
+    <table>
+        <thead>
+          <tr>
+              <th data-field="id">Client</th>
+              <th data-field="name">Project</th>
+              <th data-field="price">State</th>
+              <th data-field="date">Create Date</th>
+              <th data-field="edit">Item Edit</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td>Alvin</td>
+            <td>Eclair</td>
+            <td>Prospect</td>
+            <td>01/02/2015</td>
+            <td><button data-target="modal1" class="btn modal-trigger">edit</button></td>
+          </tr>
+          <tr>
+            <td>Alan</td>
+            <td>Jellybean</td>
+            <td>Prospect</td>
+            <td>01/02/2015</td>
+            <td><button data-target="modal1" class="btn modal-trigger">edit</button></td>
+          </tr>
+          <tr>
+            <td>Jonathan</td>
+            <td>Lollipop</td>
+            <td>Prospect</td>
+            <td>01/02/2015</td>
+            <td><button data-target="modal1" class="btn modal-trigger">edit</button></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div id="modal1" class="modal">
+          <div class="modal-content">
+            <h4>Modal Header</h4>
+            <p>A bunch of text</p>
+          </div>
+          <div class="modal-footer">
+            <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Agree</a>
+          </div>
+       </div>
   </div>
 </template>

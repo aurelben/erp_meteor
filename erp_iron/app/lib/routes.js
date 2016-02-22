@@ -40,3 +40,9 @@ Router.route('facture', {
   controller: 'FactureController',
   where: 'client'
 });
+
+Router.route('new_client', {
+  name: 'newClient',
+  controller: 'NewClientController',
+  where: 'client'
+});

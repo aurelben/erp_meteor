@@ -22,3 +22,4 @@ iron:router
 materialize:materialize
 accounts-password
 accounts-ui
+ejson

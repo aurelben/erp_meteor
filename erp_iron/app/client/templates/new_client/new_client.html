@@ -1,0 +1,42 @@
+<template name="NewClient">
+  <div class="new-client">
+    <h4>Create new client</h4>
+
+
+    <form class="col s12">
+      <div class="row">
+        <div class="input-field col s6">
+          <input placeholder="" id="client_name" type="text" class="validate">
+          <label for="client_name">Client Name</label>
+        </div>
+        <div class="input-field col s6">
+          <input id="project_name" type="text" class="validate">
+          <label for="project_name">Poject Name</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="input-field col s12">
+          <input id="email" type="email" class="validate">
+          <label for="email">Email</label>
+        </div>
+      </div>
+      <div class="row">
+      	<div class="input-field col s12">
+      	  <select class="browser-default" id="state">
+      	    <option value="" disabled selected>Choose client state</option>
+      	    <option value="prospect">Prospect</option>
+      	    <option value="devis">Devis</option>
+      	    <option value="facture">Facture</option>
+      	  </select>
+      	  
+      	</div>
+      </div>
+      <div class="row">
+      	<div class="input-field col s12">
+      		<button type="submit" id="submit">Submit</button>
+      	</div>
+      </div>
+    </form>
+
+  </div>
+</template>
