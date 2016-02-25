@@ -11,8 +11,8 @@ Template.NewClient.events({
     	console.log(error);
     	Session.set('q', result);
     };
-
-    Meteor.call('createNewClient', event.target.client_name.value+"_"+event.target.project_name.value, callback)
+    console.log(event.target.state.value);
+    Meteor.call('createNewClient', event.target.client_name.value+"_"+event.target.project_name.value, event.target.state.value, callback)
     //var result = Meteor.apply('createNewClient', [event.target.client_name.value+"_"+event.target.project_name.value], { returnStubValue: true });
 
 

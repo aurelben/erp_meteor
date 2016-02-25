@@ -9,19 +9,19 @@ Template.Todos.events({
 /*****************************************************************************/
 Template.Todos.helpers({
 
-	sing: function (){
+	// sing: function (){
 
-		var res;
-		function callback(error, result, res) {
+	// 	var res;
+	// 	function callback(error, result, res) {
 			
-			console.log(result);
-			console.log(error);
-			Session.set('q', result);
-		}
-		Meteor.call('singleton', callback);
+	// 		console.log(result);
+	// 		console.log(error);
+	// 		Session.set('q', result);
+	// 	}
+	// 	Meteor.call('singleton', callback);
 
-		return Session.get("q");
-	},
+	// 	return Session.get("q");
+	// },
 
 	state: function(){
 		function callback(error, result, res) {

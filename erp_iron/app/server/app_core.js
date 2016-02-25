@@ -3,13 +3,17 @@
 /*****************************************************************************/
 var ShortId = Npm.require('shortid');
 
-var ClientProject = function (name, date) {
-    this.currentState = new Prospect(this);
+var ClientProject = function (name, state, date) {
+    console.log(state);
+    if (!state) {
+      this.currentState = new Prospect(this);
+    }else {
+      this.currentState = eval("new "+state+"(this)");
+    }
+    
     this.currentState.subscribe(stateObs);
     this.name = name;
     this.id = ShortId.generate();
-
-    console.log("client name "+this.name);
     
     if(!date){
       this.createDate = Date.now();
@@ -48,18 +52,26 @@ var ClientProject = function (name, date) {
         console.log("I'am saving the prospect object");
     };
 
+    /**
+     * @return {Obj contain curent object property}
+     */
     this.getAllProp = function (){
       var res = {};
       res.name = this.name;
       res.id = this.id;
       res.createDate = this.createDate;
       console.log(this.currentState);
-      res.state = this.currentState.getAllProp();
+      res.state = this.currentState.getName();
 
       return (res);
     }
 };
 
+
+/**
+ * [store all client object create for easy retrive it]
+ * @type {Array}
+ */
 ClientProject.objects = [];
 
 ClientProject.prototype.removeObj = function() {
@@ -103,6 +115,10 @@ var ClientState = function (client) {
     this.save = function () {
         console.log("I'am saving the state object");
     };
+
+    this.getId = function () {
+      return this.id;
+    }
 
     this.getAllProp = function (){
       var res = {};
@@ -474,19 +490,30 @@ function facto(opt) {
 Meteor.methods({
     'getAllClients': function () {
       // server method logic
-      console.log(simpleStringify(ClientProject.objects));
-      return simpleStringify(ClientProject.objects);
+      var res = []
+      
+      for (client in ClientProject.objects) {
+        console.log(simpleStringify(ClientProject.objects[client].getAllProp()));
+        res.push(simpleStringify(ClientProject.objects[client].getAllProp()));
+      }
+      return res;
     },
 
-    createNewClient: function (name) {
-      var future = new Future();
+    'getStateFromClients': function (clientId) {
+      // server method logic
+      for (client in ClientProject.objects) {
+        if (ClientProject.objects[client].getId() === clientId) {
+          var res = ClientProject.objects[client].getState().getAllProp();
+        }
+        return (res);
+      }
+      
+    },
+
+
+    createNewClient: function (name, state) {
       console.log("createNewClient method arg name: "+name);
-      //var res = new ClientProject(name);
-      //future.resolve(facto(name));
-      //console.dir(res);
-      //return future.wait();
-      //return facto(name);
-      var res = new ClientProject(name);
+      var res = new ClientProject(name, state, null);
       console.log(simpleStringify(res));
       return (simpleStringify(res.getAllProp()));
     }  
