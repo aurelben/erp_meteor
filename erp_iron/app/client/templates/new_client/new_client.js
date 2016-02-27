@@ -3,7 +3,7 @@
 /*****************************************************************************/
 Template.NewClient.events({
 	"submit form": function (event, template) {
-	event.preventDefault();
+       event.preventDefault();
     //console.dir(event.target);
     //console.dir(template);
     function callback (error, result) {
@@ -20,10 +20,10 @@ Template.NewClient.events({
     event.target.project_name.value = "";
     event.target.email.value = "";
     event.target.state.value = "";
-    
+    Router.go('clientProject');
     //console.dir(result);
     //alert("OK");
-  }
+}
 });
 
 /*****************************************************************************/

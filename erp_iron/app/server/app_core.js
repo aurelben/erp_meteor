@@ -507,7 +507,6 @@ Meteor.methods({
         }
         return (res);
       }
-      
     },
 
 

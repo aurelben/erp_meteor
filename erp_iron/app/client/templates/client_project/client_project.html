@@ -1,7 +1,6 @@
 <template name="ClientProject">
   <div class="client-project">
     <h4>All clients list</h4>
-    {{getAllClients}}
     <table>
         <thead>
           <tr>
@@ -14,27 +13,15 @@
         </thead>
 
         <tbody>
+        {{#each getAllClients}}
           <tr>
-            <td>Alvin</td>
-            <td>Eclair</td>
-            <td>Prospect</td>
-            <td>01/02/2015</td>
-            <td><button data-target="modal1" class="btn modal-trigger">edit</button></td>
+            <td>{{client}}</td>
+            <td>{{projet}}</td>
+            <td>{{state}}</td>
+            <td>{{createDate}}</td>
+            <td><a href="{{url}}/{{id}}" class="btn">Edit</a></td>
           </tr>
-          <tr>
-            <td>Alan</td>
-            <td>Jellybean</td>
-            <td>Prospect</td>
-            <td>01/02/2015</td>
-            <td><button data-target="modal1" class="btn modal-trigger">edit</button></td>
-          </tr>
-          <tr>
-            <td>Jonathan</td>
-            <td>Lollipop</td>
-            <td>Prospect</td>
-            <td>01/02/2015</td>
-            <td><button data-target="modal1" class="btn modal-trigger">edit</button></td>
-          </tr>
+         {{/each}}
         </tbody>
       </table>
 

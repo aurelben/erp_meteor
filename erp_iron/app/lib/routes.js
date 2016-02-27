@@ -23,8 +23,8 @@ Router.route('client_project', {
   where: 'client'
 });
 
-Router.route('prospect', {
-  name: 'prospect',
+Router.route('prospect/:id', {
+  name: 'prospect', 
   controller: 'ProspectController',
   where: 'client'
 });
