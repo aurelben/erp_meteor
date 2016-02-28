@@ -3,7 +3,7 @@
 /*****************************************************************************/
 var ShortId = Npm.require('shortid');
 
-var ClientProject = function (name, state, date) {
+var ClientProject = function (name, state, date, id) {
     console.log(state);
     if (!state) {
       this.currentState = new Prospect(this);
@@ -14,13 +14,22 @@ var ClientProject = function (name, state, date) {
     this.currentState.subscribe(stateObs);
     this.name = name;
     this.id = ShortId.generate();
+
+    if (!id) {
+      this.id = ShortId.generate();
+    } else {
+      this.id = id;
+    }
     
     if(!date){
       this.createDate = Date.now();
     } else {
       this.createDate = date;
     }
-
+    
+    /**
+     * save object on objects array
+     */
     ClientProject.objects.push(this);
   
     this.setState = function (state) {
@@ -60,8 +69,21 @@ var ClientProject = function (name, state, date) {
       res.name = this.name;
       res.id = this.id;
       res.createDate = this.createDate;
-      console.log(this.currentState);
       res.state = this.currentState.getName();
+
+      return (res);
+    }
+
+    /**
+     * @return {Obj contain curent object property}
+     */
+    this.setAllProp = function (memento){
+      var m = JSON.parse(memento);
+      this.name = m.name;
+      this.id = m.id;
+      this.createDate = m.createDate;
+      // ** m.state is a state object need to rebuild it
+      this.state = m.state;
 
       return (res);
     }
@@ -93,6 +115,7 @@ var ClientState = function (client) {
     this.id = ShortId.generate();
     this.factory = new FactoryProspect();
     this.currentEtape = this.factory.createEtape("init");
+    this.fire(this);
     
     this.setEtape = function (etape) {
       this.currentEtape = this.factory.createEtape(etape);
@@ -113,7 +136,7 @@ var ClientState = function (client) {
     };
   
     this.save = function () {
-        console.log("I'am saving the state object");
+        console.log("*********I'am saving the state object**********");
     };
 
     this.getId = function () {
@@ -125,7 +148,6 @@ var ClientState = function (client) {
       res.name = this.name;
       res.id = this.id;
       res.createDate = this.createDate;
-      console.log(this.currentEtape);
       res.etape = this.currentEtape.getAllProp();
 
       return (res);
@@ -154,7 +176,7 @@ ClientState.prototype = {
     },
  
     fire: function(o, thisObj) {
-        var scope = thisObj || window;
+        var scope = thisObj || global;
         
         this.handlers.forEach(function(item) {
             item.call(scope, o);
@@ -463,7 +485,6 @@ function run() {
   return ("END ____---------_________------- Return");
 }
 
-var Future = Npm.require( 'fibers/future' );
 
 
 function simpleStringify (object){
@@ -488,35 +509,62 @@ function facto(opt) {
 };
 
 Meteor.methods({
-    'getAllClients': function () {
-      // server method logic
-      var res = []
-      
-      for (client in ClientProject.objects) {
-        console.log(simpleStringify(ClientProject.objects[client].getAllProp()));
-        res.push(simpleStringify(ClientProject.objects[client].getAllProp()));
-      }
-      return res;
-    },
-
-    'getStateFromClients': function (clientId) {
-      // server method logic
-      for (client in ClientProject.objects) {
-        if (ClientProject.objects[client].getId() === clientId) {
-          var res = ClientProject.objects[client].getState().getAllProp();
+    getAllClients: function () {
+        // server method logic
+        var res = []
+        
+        for (client in ClientProject.objects) {
+          //console.log(simpleStringify(ClientProject.objects[client].getAllProp()));
+          res.push(simpleStringify(ClientProject.objects[client].getAllProp()));
         }
-        return (res);
+        return res;
+    },
+
+    getStateFromClients: function (clientId) {
+        // server method logic
+        for (client in ClientProject.objects) {
+          if (ClientProject.objects[client].getId() === clientId) {
+            var res = ClientProject.objects[client].getState().getAllProp();
+          }
+          return (res);
+        }
+      },
+
+      getEtapeFromState: function (stateId) {
+        // server method logic
+        for (client in ClientProject.objects) {
+          if (ClientProject.objects[client].getState().getId() === stateId) {
+            var res = ClientProject.objects[client].getState().getEtape().getAllProp();
+          }
+          return (res);
       }
       
     },
 
 
-    createNewClient: function (name, state) {
+    createNewClient: function (name, state, etape, valid) {
       console.log("createNewClient method arg name: "+name);
       var res = new ClientProject(name, state, null);
       console.log(simpleStringify(res));
       return (simpleStringify(res.getAllProp()));
-    }  
+    },
+
+    updateClient: function (clientId, obj) {
+      var iter = new Iterator(ClientProject.objects);
+    },
+
+    getClient: function (clientId) {
+      var iter = new Iterator(ClientProject.objects);
+      
+      iter.each(function(client){
+        if (client.getId() === clientId) {
+          console.log(client.getId());
+          return client.getAllProp();
+        }
+        log.add("error client id not found");
+        log.show();
+      });
+    }
 });
 
 
