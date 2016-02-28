@@ -20,6 +20,7 @@
             <td>{{state}}</td>
             <td>{{createDate}}</td>
             <td><a href="{{url}}/{{id}}" class="btn">Edit</a></td>
+
           </tr>
          {{/each}}
         </tbody>
@@ -28,10 +29,10 @@
       <div id="modal1" class="modal">
           <div class="modal-content">
             <h4>Modal Header</h4>
-            <p>A bunch of text</p>
+            {{> NewClient}}
           </div>
           <div class="modal-footer">
-            <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Agree</a>
+            <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Close</a>
           </div>
        </div>
   </div>

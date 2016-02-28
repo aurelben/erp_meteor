@@ -22,32 +22,51 @@
       </div>
       <div class="row">
       	<div class="input-field col s12">
-         <select class="browser-default" id="state">
-           <option value="" disabled selected>Choose client state</option>
-           <option value="Prospect">Prospect</option>
-           <option value="Devis">Devis</option>
-           <option value="Facture">Facture</option>
-         </select>
+      	  <select class="browser-default" id="state">
+      	    <option value="" disabled selected>Choose client state</option>
+      	    <option value="Prospect">Prospect</option>
+      	    <option value="Devis">Devis</option>
+      	    <option value="Facture">Facture</option>
+      	  </select>
+      	  
+      	</div>
+      </div>
 
-       </div>
-     </div>
-     <div class="row">
-       <div class="input-field col s12">
-         <select class="browser-default" id="etape">
-           <option value="" disabled selected>Choose state etape</option>
-           <option value="init">init</option>
-           <option value="confirm">confirm</option>
-           <option value="valid">valid</option>
-         </select>
+      <div class="row">
+      	<div class="input-field col s12">
+      	  <select class="browser-default hide" id="etape">
+      	    <option value="" disabled selected>Choose state etape</option>
+      	    <option value="init">init</option>
+      	    <option value="confirm">confirm</option>
+      	    <option value="valid">valid</option>
+      	  </select>
+      	  
+      	</div>
+      </div>
 
-       </div>
-     </div>
-    <div class="row">
-     <div class="input-field col s12">
-      <button type="submit" id="submit">Submit</button>
-    </div>
-  </div>
-</form>
+      <div class="row">
+      	<div class="input-field col s12">
+      	  <!-- Switch -->
+      	  <span>Validate etape</span>
+      	    <div class="switch">
+      	    
+      	      <label>
+      	        No
+      	        <input type="checkbox" id='valid' class="hide">
+      	        <span class="lever"></span>
+      	        Yes
+      	      </label>
+      	    </div>
+      	  
+      	</div>
+      </div>
+
+      <div class="row">
+      	<div class="input-field col s12">
+      		<button type="submit" id="submit">Submit</button>
+      	</div>
+      </div>
+    </form>
 
 </div>
 </template>
