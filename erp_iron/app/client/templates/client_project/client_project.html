@@ -10,6 +10,7 @@
               <th data-field="price">State</th>
               <th data-field="date">Create Date</th>
               <th data-field="edit">Item Edit</th>
+              <th data-field="edit">Go Curent state</th>
           </tr>
         </thead>
 
@@ -17,11 +18,12 @@
         {{#with getAllClients}}
         {{#each getAllClients}}
           <tr>
-            <td>{{name}}</td>
+            <td>{{client}}</td>
             <td>{{proj}}</td>
             <td>{{state}}</td>
             <td>{{createDate}}</td>
             <td><button data-target="modal1" class="btn modal-trigger">edit</button></td>
+            <td><a href="{{url}}/{{id}}" class="btn">Go</a></td>
           </tr>
           {{/each}}
           {{/with}}

@@ -18,11 +18,12 @@ Template.ClientProject.helpers({
 			if (result) {
 				console.dir(result);
 				for (x in result){
-					var tmp = JSON.parse(result[x]).name.split("_");
-					JSON.parse(result[x]).name = tmp[0];
-					JSON.parse(result[x]).proj = tmp[1];
-					console.dir(JSON.parse(result[x]).name);
-					Session.set("clients", result);
+					data = JSON.parse(result[x].split(','));
+					split = data['name'].split("_");
+					data['client'] = split[0];
+					data['proj'] = split[1];
+					data['url'] = data['state'].toLowerCase()
+					result[x] = data;
 				}
 				Session.set("clients", result);
 			}

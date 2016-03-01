@@ -1,5 +1,47 @@
 <template name="Prospect">
-  <div class="prospect">
-    <h1>Find me in app/client/templates/prospect/prospect</h1>
-  </div>
+	<div class="prospect">
+		{{#if getStateFromClients}}
+			{{>init}}
+		{{else}}
+			{{>confirm}}
+		{{/if}}
+	</div>
+</template>
+
+<template name='init'>
+	<form class="col s12">
+		<div class="input-field col s12">
+			<select class="browser-default" id="client">
+				{{#each getAllClients}}
+				<option> {{client}}</option>      
+				{{/each}}
+			</select>	
+		</div>
+		<div class="row">
+			<div class="input-field col s12">
+				<button type="submit" id="submit">Submit</button>
+			</div>
+		</div>
+
+	</form>
+</template>
+
+
+<template name='confirm'>
+	<form class="col s12">
+		<div class="row">
+			<div class="input-field col s12">
+				<button type="submit" id="submit">Confirm</button>
+			</div>
+		</div>	
+	</form>
+</template>
+
+
+<template name='valid'>
+	<form class="col s12">
+		<div class="input-field col s12">
+			<button type="submit" id="submit">Go to devis</button>
+		</div>
+	</form>
 </template>

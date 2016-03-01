@@ -523,7 +523,7 @@ Meteor.methods({
     getStateFromClients: function (clientId) {
         // server method logic
         for (client in ClientProject.objects) {
-          if (ClientProject.objects[client].getId() === clientId) {
+          if (ClientProject.objects[client]['id'] === clientId) {
             var res = ClientProject.objects[client].getState().getAllProp();
           }
           return (res);
