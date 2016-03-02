@@ -3,7 +3,9 @@
 /*****************************************************************************/
 var ShortId = Npm.require('shortid');
 
-var ClientProject = function (name, state, date, id) {
+
+
+ClientProject = function (name, state, date, id) {
     console.log(state);
     if (!state) {
       this.currentState = new Prospect(this);
@@ -31,6 +33,11 @@ var ClientProject = function (name, state, date, id) {
      * save object on objects array
      */
     ClientProject.objects.push(this);
+    //caretaker.add(this.id, this.hydrate());
+    //
+    this.getId = function () {
+      return this.id;
+    };
   
     this.setState = function (state) {
         this.currentState.unsubscribe(stateObs);
@@ -39,6 +46,7 @@ var ClientProject = function (name, state, date, id) {
         
         this.currentState.subscribe(stateObs);
         this.currentState.save();
+        //caretaker.add(this.id, this.hydrate());
     };
   
     this.getState = function (){
@@ -72,7 +80,7 @@ var ClientProject = function (name, state, date, id) {
       res.state = this.currentState.getName();
 
       return (res);
-    }
+    };
 
     /**
      * @return {Obj contain curent object property}
@@ -83,10 +91,12 @@ var ClientProject = function (name, state, date, id) {
       this.id = m.id;
       this.createDate = m.createDate;
       // ** m.state is a state object need to rebuild it
-      this.state = m.state;
+      //this.state = m.state;
 
-      return (res);
-    }
+      return (this);
+    };
+
+    
 };
 
 
@@ -103,6 +113,51 @@ ClientProject.prototype.removeObj = function() {
     }
   }
 };
+
+/*****************************************************************************/
+/*  Define menento pattern */
+/*****************************************************************************/
+
+
+
+  ClientProject.prototype .hydrate =  function () {
+    var tmp = this.getAllProp();
+    var tmpState = this.getState();
+    tmp.stateObj = tmpState.getAllProp();
+    memento = JSON.stringify(tmp);
+
+    return memento;
+  };
+
+  ClientProject.prototype.dehydrate = function (memento) {
+    console.dir(memento);
+    var m = JSON.parse(memento);
+    console.log("dehydrate memento recived object");
+    console.dir(m);
+    this.setAllProp(memento);
+    console.dir(m.stateObj);
+    this.currentState.setAllProp(m.stateObj);
+  };
+  
+
+
+var CareTaker = function () {
+  this.mementos = {};
+
+  this.add = function (key, memento) {
+    this.mementos[key] = memento;
+    saveToFile(this.mementos, "save.json");
+  },
+
+  this.get = function (key) {
+    return this.mementos[key];
+  }
+};
+
+
+
+
+
 
 
 /*****************************************************************************/
@@ -152,6 +207,24 @@ var ClientState = function (client) {
 
       return (res);
     }
+
+    /**
+     * @return {Obj contain curent object property}
+     */
+    this.setAllProp = function (memento){
+      console.log("\nSTATE setAllProp\n");
+      //console.dir(memento);
+      var m = memento;
+      console.dir(m.etape.name);
+      this.name = m.name;
+      this.id = m.id;
+      this.createDate = m.createDate;
+      this.setEtape(m.etape.name.split(" ")[0]);
+      // ** m.state is a state object need to rebuild it
+      //this.state = m.state;
+
+      return (this);
+    };
 };
 
 
@@ -254,6 +327,7 @@ function FactoryProspect() {
     "valid": ContactValidProspect,
     "confirm": ConfirmNeedProspect
   };
+  
     this.createEtape = function (type) {
         var etape;
         
@@ -261,6 +335,9 @@ function FactoryProspect() {
           if(type === x) {
             etape = new this.authorizedEtape[x]();
             break;
+          } else {
+            console.log("ERROR etape "+type+" not authorized \n");
+            //return;
           }
         }
         etape.type = type;
@@ -271,6 +348,8 @@ function FactoryProspect() {
  
         return etape;
     };
+
+    
 }
 
 /*****************************************************************************/
@@ -445,13 +524,15 @@ ConfirmNeedFacture.prototype = new InitialFacture();
 /*****************************************************************************/
 /* Unit test */
 /*****************************************************************************/
+caretaker = new CareTaker();
 
-function run() {
+function run(caretaker) {
   var client = new ClientProject("alex");
-
+  caretaker.add(client.getId(), client.hydrate());
   
   //client.getState().subscribe(stateObs);
   client.getState().setEtape("confirm");
+  caretaker.add(client.getId(), client.hydrate());
   client.getState().fire(client.getState());
   
   
@@ -472,17 +553,20 @@ function run() {
  
 //   }, 2000);
   var client2 = new ClientProject("alexMAJ");
-
+  caretaker.add(client2.getId(), client2.hydrate());
+  console.dir(caretaker.get(client2.getId()));
+  client2.dehydrate(caretaker.get(client2.getId()));
 
   console.log("client 1 name: %s", client.getName());
   console.log("client 1 creation date: %d", client.getCreationDate());
   console.log("client 1 state is:"+ client.getState().getName());
+
+  console.dir(caretaker.get(client2.getId()));
   
   // console.log("client 2 name: %s", client2.getName());
   // console.log("client 2 creation date: %d", client2.getCreationDate());
   
-  
-  return ("END ____---------_________------- Return");
+  return ("END ________---------_________------- Return");
 }
 
 
@@ -508,6 +592,7 @@ function facto(opt) {
   return new ClientProject(opt);
 };
 
+
 Meteor.methods({
     getAllClients: function () {
         // server method logic
@@ -515,7 +600,7 @@ Meteor.methods({
         
         for (client in ClientProject.objects) {
           //console.log(simpleStringify(ClientProject.objects[client].getAllProp()));
-          res.push(simpleStringify(ClientProject.objects[client].getAllProp()));
+          res.push(JSON.stringify(ClientProject.objects[client].getAllProp()));
         }
         return res;
     },
@@ -544,6 +629,7 @@ Meteor.methods({
     createNewClient: function (name, state, etape, valid) {
       console.log("createNewClient method arg name: "+name);
       var res = new ClientProject(name, state, null);
+      caretaker.add(res.getId(), res.hydrate());
       console.log(simpleStringify(res));
       return (simpleStringify(res.getAllProp()));
     },
@@ -563,7 +649,14 @@ Meteor.methods({
         log.add("error client id not found");
         log.show();
       });
-    }
+    },
+
+    'testState': function () {
+      // server method logic
+      console.info("in testState");
+      run(caretaker);
+      return "ok";
+  },
 });
 
 

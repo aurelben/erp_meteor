@@ -32,6 +32,20 @@ Template.ClientProject.helpers({
 		Meteor.call('getAllClients', callback);
 		return Session.get("clients");
 		
+	},
+
+	getClient: function () {
+		function callback(error, result) {
+			if (error) {return console.log(error)}
+
+			if (result) {
+				var res = JSON.parse(result);
+				Session.set(res.id, res);
+			}	
+
+		}
+
+		Meteor.call('getClient', callback);
 	}
 });
 

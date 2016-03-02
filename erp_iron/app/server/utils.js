@@ -3,6 +3,8 @@
 /*****************************************************************************/
 
 fs = Npm.require('fs');
+__ROOT_APP_PATH__ = fs.realpathSync('.');
+__SAVE_OBJ_PATH__ = '/Users/aurel/Documents/etna/etna_erp/erp_iron/app';
 
 var log = (function() {
     var log = "";
@@ -12,23 +14,30 @@ var log = (function() {
     }
 })();
 
-function saveToFile(str, file) {
-	fs.writeFile('helloworld.txt', 'Hello World!', function (err) {
+saveToFile = function (str, file) {
+	console.log(__ROOT_APP_PATH__);
+	fs.writeFile(__SAVE_OBJ_PATH__+'/'+file, JSON.stringify(str), function (err) {
 	  if (err) return console.log(err);
-	  console.log('Hello World > helloworld.txt');
+	  console.log("Save: "+str);
 	});
 }
 
-function createObjFromFile () {
-	res = fs.readFileSync('./helloworld.txt', 'utf8');
+createObjFromFile = function (file) {
+	try {
+		res = fs.readFileSync(file, 'utf8');
+		return res;
+	} catch (e) {
+		console.log(e);
+	}
+	
 }
 
-function iterator (item) {
+Iterator = function (item) {
 	index = 0;
-	this.item = item;
+	this.items = item;
 }
 
-iterator.protorype = {
+Iterator.prototype = {
 	first: function() {
         this.reset();
         return this.next();

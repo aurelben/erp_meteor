@@ -135,10 +135,10 @@ function run() {
 }
 
 Meteor.methods({
-  	'testState': function () {
-    	// server method logic
-    	console.info("inst testState");
-    	run();
-    	return "ok";
-	}
+ //  	'testState': function () {
+ //    	// server method logic
+ //    	console.info("inst testState");
+ //    	run();
+ //    	return "ok";
+	// }
 });
