@@ -73,7 +73,12 @@ Template.Edit.helpers({
 			Meteor.call('getAllClients' ,callback);
 			console.log(Session.get("clients"));
 			return Session.get("clients");
+		},
+		option: function(option){
+			data = Session.get("clients")
+			return option === data.state ? "" : false;
 		}
+
 	});
 
 /*****************************************************************************/

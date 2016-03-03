@@ -14,10 +14,10 @@
       <tbody>
         {{#each getAllClients}}
         <tr>
-          <td>{{client}}</td>
-          <td>{{projet}}</td>
-          <td>{{state}}</td>
-          <td><a href="edit/{{id}}" class="btn">Editer</a></td>
+          <td>{{this.client}}</td>
+          <td>{{this.projet}}</td>
+          <td>{{this.state}}</td>
+          <td><a href="edit/{{this.id}}" class="btn">Editer</a></td>
 
         </tr>
         {{/each}}

@@ -3,8 +3,8 @@
     <h4>Edit client</h4>
 
     <form class="col s12">
-    {{#if getClient}}
-        
+      {{#if getClient}}
+
       <div class="row">
         <div class="input-field col s6">
           <input placeholder="" id="client_name" type="text" class="validate" value="{{getClient.client}}">
@@ -18,10 +18,10 @@
       <div class="row">
         <div class="input-field col s12">
           <select class="browser-default" id="state">
-            <option value="" disabled selected>Choose client state</option>
-            <option value="Prospect">Prospect</option>
-            <option value="Devis">Devis</option>
-            <option value="Facture">Facture</option>
+            <option value="" disabled >Choose client state</option>
+            <option value="Prospect" selected={{option 'Prospect' }}>Prospect</option>
+            <option value="Devis" selected={{option 'Devis' }}>Devis</option>
+            <option value="Facture" selected={{option 'Facture' }}>Facture</option>
           </select>
           
         </div>
@@ -29,7 +29,7 @@
 
       <div class="row">
         <div class="input-field col s12">
-          <select class="browser-default hide" id="etape">
+          <select class="browser-default" id="etape">
             <option value="" disabled selected>Choose state etape</option>
             <option value="init">init</option>
             <option value="confirm">confirm</option>
@@ -43,15 +43,15 @@
         <div class="input-field col s12">
           <!-- Switch -->
           <span>Validate etape</span>
-            <div class="switch">
-            
-              <label>
-                No
-                <input type="checkbox" id='valid' class="hide">
-                <span class="lever"></span>
-                Yes
-              </label>
-            </div>
+          <div class="switch">
+
+            <label>
+              No
+              <input type="checkbox" id='valid' class="hide">
+              <span class="lever"></span>
+              Yes
+            </label>
+          </div>
           
         </div>
       </div>
@@ -64,5 +64,5 @@
       {{/if}}
     </form>
 
-</div>
+  </div>
 </template>
