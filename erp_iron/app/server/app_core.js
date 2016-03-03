@@ -78,6 +78,7 @@ ClientProject = function (name, state, date, id) {
       res.id = this.id;
       res.createDate = this.createDate;
       res.state = this.currentState.getName();
+      res.etape = this.curentState.getEtape().getName();
 
       return (res);
     };
