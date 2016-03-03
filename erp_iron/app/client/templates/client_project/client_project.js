@@ -18,12 +18,12 @@ Template.ClientProject.helpers({
 			if (result) {
 				console.dir(result);
 				for (var i = 0; i < result.length; i++) {
-				data = JSON.parse(result[i].split(','));
-				split = data['name'].split("_");
-				data['client'] = split[0];
-				data['projet'] = split[1];
-				data['url'] = data['state'].toLowerCase()
-				result[i] = data;
+					data = JSON.parse(result[i].split(','));
+					split = data['name'].split("_");
+					data['client'] = split[0];
+					data['projet'] = split[1];
+					data['url'] = data['state'].toLowerCase()
+					result[i] = data;
 				}
 				Session.set("clients", result);
 			}			
@@ -38,16 +38,17 @@ Template.ClientProject.helpers({
 		function callback(error, result) {
 			if (error) {return console.log(error)}
 
-			if (result) {
-				var res = JSON.parse(result);
-				Session.set(res.id, res);
-			}	
+				if (result) {
+					var res = JSON.parse(result);
+					Session.set(res.id, res);
+				}	
 
-		}
+			}
 
-		Meteor.call('getClient', callback);
-	}
-});
+			Meteor.call('getClient', callback);
+		},
+
+	});
 
 /*****************************************************************************/
 /* ClientProject: Lifecycle Hooks */

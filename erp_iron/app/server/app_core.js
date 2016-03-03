@@ -643,11 +643,11 @@ Meteor.methods({
       
       iter.each(function(client){
         if (client.getId() === clientId) {
-          console.log(client.getId());
-          return client.getAllProp();
+          console.log(client.getAllProp());
+          return (client.getAllProp());
         }
-        log.add("error client id not found");
-        log.show();
+        //log.add("error client id not found");
+        //log.show();
       });
     },
 

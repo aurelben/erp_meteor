@@ -22,7 +22,14 @@ Router.route('client_project', {
   controller: 'ClientProjectController',
   where: 'client'
 });
-
+Router.route('edit/:id', {
+  name: 'edit', 
+  controller: 'ProspectController',
+  where: 'client',
+  data: function(){
+      Session.set('id',this.params.id)
+    }
+});
 Router.route('prospect/:id', {
   name: 'prospect', 
   controller: 'ProspectController',

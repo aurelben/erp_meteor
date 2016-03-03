@@ -4,7 +4,7 @@
 
 fs = Npm.require('fs');
 __ROOT_APP_PATH__ = fs.realpathSync('.');
-__SAVE_OBJ_PATH__ = '/Users/aurel/Documents/etna/etna_erp/erp_iron/app';
+__SAVE_OBJ_PATH__ = '/home/benoit/erp/erp_meteor/erp_iron/app';
 
 var log = (function() {
     var log = "";

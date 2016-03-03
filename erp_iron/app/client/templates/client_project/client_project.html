@@ -2,38 +2,28 @@
   <div class="client-project">
     <h4>All clients list</h4>
     <table>
-        <thead>
-          <tr>
-              <th data-field="id">Client</th>
-              <th data-field="name">Project</th>
-              <th data-field="price">State</th>
-              <th data-field="date">Create Date</th>
-              <th data-field="edit">Item Edit</th>
-          </tr>
-        </thead>
+      <thead>
+        <tr>
+          <th data-field="id">Client</th>
+          <th data-field="name">Project</th>
+          <th data-field="price">Etape</th>
+          <th data-field="edit">Editer</th>
+          <th data-field="edit">Go Curent state</th>
+        </tr>
+      </thead>
 
-        <tbody>
+      <tbody>
         {{#each getAllClients}}
-          <tr>
-            <td>{{client}}</td>
-            <td>{{projet}}</td>
-            <td>{{state}}</td>
-            <td>{{createDate}}</td>
-            <td><a href="{{url}}/{{id}}" class="btn">Edit</a></td>
+        <tr>
+          <td>{{client}}</td>
+          <td>{{projet}}</td>
+          <td>{{state}}</td>
+          <td><a href="edit/{{id}}" class="btn">Go</a></td>
+          <td><a href="{{url}}/{{id}}" class="btn">Go</a></td>
 
-          </tr>
-         {{/each}}
-        </tbody>
-      </table>
-
-      <div id="modal1" class="modal">
-          <div class="modal-content">
-            <h4>Modal Header</h4>
-            {{> NewClient}}
-          </div>
-          <div class="modal-footer">
-            <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Close</a>
-          </div>
-       </div>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
   </div>
 </template>
