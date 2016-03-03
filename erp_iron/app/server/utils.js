@@ -35,7 +35,9 @@ createObjFromFile = function (file) {
 
 Iterator = function (item) {
 	index = 0;
+	keys = Object.keys(item);
 	this.items = item;
+	length = keys.length;
 }
 
 Iterator.prototype = {
@@ -44,10 +46,15 @@ Iterator.prototype = {
         return this.next();
     },
     next: function() {
-        return this.items[this.index++];
+    	if (!this.hasNext()) { 
+    		return null
+    	}
+    	elem = this.items[keys[index]]
+    	index++;
+        return elem;
     },
     hasNext: function() {
-        return this.index <= this.items.length;
+        return this.index <= length;
     },
     reset: function() {
         this.index = 0;
