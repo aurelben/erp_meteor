@@ -26,10 +26,10 @@ MyLog = (function() {
 })();
 
 saveToFile = function (str, file) {
-	console.log(__ROOT_APP_PATH__);
+	//console.log(__ROOT_APP_PATH__);
 	fs.writeFile(__SAVE_OBJ_PATH__+'/'+file, JSON.stringify(str), function (err) {
 	  if (err) return console.log(err);
-	  console.log("Save: "+str);
+	  //console.log("Save: "+str);
 	});
 }
 

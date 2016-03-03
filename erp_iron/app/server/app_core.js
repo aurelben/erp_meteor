@@ -608,7 +608,6 @@ Meteor.methods({
           //console.log(simpleStringify(ClientProject.objects[client].getAllProp()));
           res.push(JSON.stringify(ClientProject.objects[client].getAllProp()));
         }
-        MyLog.add("get all clients");
         return res;
     },
 
@@ -638,22 +637,25 @@ Meteor.methods({
       var res = new ClientProject(name, state, null);
       caretaker.add(res.getId(), res.hydrate());
       console.log(simpleStringify(res));
-      MyLog.add("create clients "+res.getId());
       return (simpleStringify(res.getAllProp()));
     },
 
     updateClient: function (clientId, name, state, etape, valid) {
       var iter = new Iterator(ClientProject.objects);
-            iter.each(function(client){
-        if (client.getId() === clientId) {
-          client.setName(name);
-          client.setState(state);
-          console.log(client);
-          caretaker.add(client.getId(), client.hydrate());
-          MyLog.add("update client: "+client.getId());
+      // iter.each(function(client){
+
+      // });
+      
+      for (client in ClientProject.objects) {
+        if (ClientProject.objects[client].getId() === clientId) {
+          ClientProject.objects[client].setName(name);
+          console.log("update client state name "+state)
+          ClientProject.objects[client].setState(state);
+          console.log(ClientProject.objects[client]);
+          caretaker.add(ClientProject.objects[client].getId(), ClientProject.objects[client].hydrate());
           /*marche niquel pour le name*/
         }
-      });
+      }
     },
 
     getClient: function (clientId) {

@@ -20,7 +20,6 @@ Template.Edit.events({
 	    event.target.etape.value = "";
 	    event.target.valid.value = "";
 	    Router.go('clientProject');
-
     //console.dir(result);
     //alert("OK");
 },
