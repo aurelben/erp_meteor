@@ -14,7 +14,7 @@ Meteor.startup(function () {
 	
 	for (var x in tmp) {
 		console.log(tmp[x]);
-		var tmp_client = new ClientProject(tmp[x].state);
+		var tmp_client = new ClientProject(tmp[x].name, tmp[x].state);
 		tmp_client.dehydrate(tmp[x]);
 	}
 	
