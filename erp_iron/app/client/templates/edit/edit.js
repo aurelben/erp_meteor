@@ -8,22 +8,18 @@ Template.Edit.events({
 	    //console.dir(event.target);
 	    //console.dir(template);
 	    function callback (error, result) {
-	    	console.log("new client callback res: "+result);
-	    	console.log(error);
-	    	Session.set('q', result);
 	    };
 	    console.log(event.target.state.value);
-	    Meteor.call('createNewClient', event.target.client_name.value+"_"+event.target.project_name.value, event.target.state.value, event.target.etape.value, event.target.valid.value,  callback)
+	    Meteor.call('updateClient',Session.get('id'),event.target.client_name.value+"_"+event.target.project_name.value, event.target.state.value, event.target.etape.value, event.target.valid.value,callback);
 	    //var result = Meteor.apply('createNewClient', [event.target.client_name.value+"_"+event.target.project_name.value], { returnStubValue: true });
 
 
 	    event.target.client_name.value = "";
 	    event.target.project_name.value = "";
-	    event.target.email.value = "";
 	    event.target.state.value = "";
 	    event.target.etape.value = "";
 	    event.target.valid.value = "";
-	   // Router.go('clientProject');
+	    Router.go('clientProject');
 
     //console.dir(result);
     //alert("OK");
@@ -56,23 +52,28 @@ Template.Edit.events({
 Template.Edit.helpers({
 	getClient: function () {
 		function callback(error, result) {
-		console.log('result == ',result);
 			if (error) {return console.log(error)}
 
 				if (result) {
-					console.log(result);
 					for (var i = 0; i < result.length; i++) {
+
 						data = JSON.parse(result[i].split(','));
-						split = data['name'].split("_");
-						data['client'] = split[0];
-						data['projet'] = split[1];
-						data['url'] = data['state'].toLowerCase()
-						result[i] = data;
+						if (Session.get('id') == data['id']) {
+							split = data['name'].split("_");
+							data['client'] = split[0];
+							data['projet'] = split[1];
+							data['url'] = data['state'].toLowerCase()
+							ret = data;
+							Session.set("clients", ret);
+						}
 					}
+
 				}	
 
 			}
-			Meteor.call('getClient',Session.get('id') ,callback);
+			Meteor.call('getAllClients' ,callback);
+			console.log(Session.get("clients"));
+			return Session.get("clients");
 		}
 	});
 

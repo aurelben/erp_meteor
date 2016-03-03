@@ -634,8 +634,16 @@ Meteor.methods({
       return (simpleStringify(res.getAllProp()));
     },
 
-    updateClient: function (clientId, obj) {
+    updateClient: function (clientId, name, state, etape, valid) {
       var iter = new Iterator(ClientProject.objects);
+            iter.each(function(client){
+        if (client.getId() === clientId) {
+          client.setName(name);
+          client.setState(state);
+          console.log(client);
+          /*marche niquel pour le name*/
+        }
+      });
     },
 
     getClient: function (clientId) {

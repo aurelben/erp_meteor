@@ -2,22 +2,17 @@
   <div class="new-client">
     <h4>Edit client</h4>
 
-{{getClient}}
     <form class="col s12">
+    {{#if getClient}}
+        
       <div class="row">
         <div class="input-field col s6">
-          <input placeholder="" id="client_name" type="text" class="validate">
+          <input placeholder="" id="client_name" type="text" class="validate" value="{{getClient.client}}">
           <label for="client_name">Client Name</label>
         </div>
         <div class="input-field col s6">
-          <input id="project_name" type="text" class="validate">
+          <input id="project_name" type="text" class="validate" value="{{getClient.projet}}">
           <label for="project_name">Poject Name</label>
-        </div>
-      </div>
-      <div class="row">
-        <div class="input-field col s12">
-          <input id="email" type="email" class="validate">
-          <label for="email">Email</label>
         </div>
       </div>
       <div class="row">
@@ -66,6 +61,7 @@
           <button class="btn" type="submit" id="submit">Submit</button>
         </div>
       </div>
+      {{/if}}
     </form>
 
 </div>
