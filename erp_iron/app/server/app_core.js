@@ -42,7 +42,7 @@ ClientProject = function (name, state, date, id) {
     this.setState = function (state) {
         this.currentState.unsubscribe(stateObs);
         
-        this.currentState = state;
+        this.currentState = eval("new "+state+"(this)");
         
         this.currentState.subscribe(stateObs);
         this.currentState.save();
@@ -442,9 +442,10 @@ ConfirmNeedProspect.prototype = new InitialProspect();
 function InitialDevis (){
   console.log("init devis");
   this.isvalid = false;
+  this.name = "init Devis";
 
   this.getName = function () {
-    return "init Devis";
+    return this.name;
   };
 
   this.setValid = function(opt) {
@@ -469,9 +470,10 @@ ContactValidDevis.prototype = new InitialDevis();
 
 function ConfirmNeedDevis (){
   console.log("confirm devis");
-  
+  this.name = "init Devis";
+
   this.getName = function () {
-    return "confirm Devis";
+    return this.name;
   };
 
 }
@@ -639,6 +641,7 @@ Meteor.methods({
             iter.each(function(client){
         if (client.getId() === clientId) {
           client.setName(name);
+          console.log("update client state: "+state);
           client.setState(state);
           console.log(client);
           /*marche niquel pour le name*/
