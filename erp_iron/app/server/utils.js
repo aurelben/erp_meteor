@@ -7,11 +7,21 @@ fs = Npm.require('fs');
 __ROOT_APP_PATH__ = fs.realpathSync('.');
 __SAVE_OBJ_PATH__ = '/Users/aurel/Documents/etna/etna_erp/erp_iron/app';
 
-var log = (function() {
-    var log = "";
+
+MyLog = (function() { 
+	try {
+    	var log = fs.readFileSync(__SAVE_OBJ_PATH__+"/log.txt", 'utf8');
+	} catch (e){
+		console.log(e);
+		var log = "";
+	}
+
     return {
-        add: function(msg) { log += "timestamp : "+Date.now()+" user: "+this.user.name+" message: "+msg + "\n"; },
-        show: function() { console.log(log); log = ""; } 
+        add: function(msg) { 
+        	log += "timestamp : "+Date.now()+" user: "+"user.userId()"+" message: "+msg + "\n";
+        	saveToFile(log, "/log.txt" );
+        },
+        show: function() { console.log(log);} 
     }
 })();
 

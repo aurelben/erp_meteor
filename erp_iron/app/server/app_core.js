@@ -7,6 +7,7 @@ var ShortId = Npm.require('shortid');
 
 ClientProject = function (name, state, date, id) {
     console.log(state);
+    this.currentState = new Prospect(this);
     if (!state) {
       this.currentState = new Prospect(this);
     }else {
@@ -33,6 +34,7 @@ ClientProject = function (name, state, date, id) {
      * save object on objects array
      */
     ClientProject.objects.push(this);
+    MyLog.add("create clients "+this.id);
     //caretaker.add(this.id, this.hydrate());
     //
     this.getId = function () {
@@ -45,7 +47,7 @@ ClientProject = function (name, state, date, id) {
         this.currentState = eval("new "+state+"(this)");
         
         this.currentState.subscribe(stateObs);
-        this.currentState.save();
+        MyLog.add("set state clients "+this.id);
         //caretaker.add(this.id, this.hydrate());
     };
   
@@ -78,7 +80,7 @@ ClientProject = function (name, state, date, id) {
       res.id = this.id;
       res.createDate = this.createDate;
       res.state = this.currentState.getName();
-      res.etape = this.curentState.getEtape().getName();
+      res.etape = this.curentState;
 
       return (res);
     };
@@ -91,6 +93,7 @@ ClientProject = function (name, state, date, id) {
       this.name = m.name;
       this.id = m.id;
       this.createDate = m.createDate;
+      MyLog.add("set all props for clients "+this.id);
       // ** m.state is a state object need to rebuild it
       //this.state = m.state;
 
@@ -605,6 +608,7 @@ Meteor.methods({
           //console.log(simpleStringify(ClientProject.objects[client].getAllProp()));
           res.push(JSON.stringify(ClientProject.objects[client].getAllProp()));
         }
+        MyLog.add("get all clients");
         return res;
     },
 
@@ -634,6 +638,7 @@ Meteor.methods({
       var res = new ClientProject(name, state, null);
       caretaker.add(res.getId(), res.hydrate());
       console.log(simpleStringify(res));
+      MyLog.add("create clients "+res.getId());
       return (simpleStringify(res.getAllProp()));
     },
 
@@ -642,9 +647,10 @@ Meteor.methods({
             iter.each(function(client){
         if (client.getId() === clientId) {
           client.setName(name);
-          console.log("update client state: "+state);
           client.setState(state);
           console.log(client);
+          caretaker.add(client.getId(), client.hydrate());
+          MyLog.add("update client: "+client.getId());
           /*marche niquel pour le name*/
         }
       });
